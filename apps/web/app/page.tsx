@@ -1,11 +1,8 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
 
 
 
 export default function Home() {
-  return <div className="flex justify-center items-center">
-    Welcome to Legalease
+  return <div className="flex justify-center items-center p-6">
+    <h1>Welcome to Legalease</h1>
   </div>
 }

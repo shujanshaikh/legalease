@@ -7,9 +7,9 @@ import type { ChatCompletionMessageParam } from "openai/resources/chat/completio
 import { SYSTEM_PROMPT } from "prompt/prompts/systemPrompt"
 import { pdfPrompt } from "prompt/prompts/pdfPrompt"
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { authMiddleware } from "./middleware";
 
 const apiKey = Bun.env.GEMINI_API_KEY;
-const userId = "shujan123";
 
 
 const app = express();
@@ -60,7 +60,9 @@ app.get("/pre-signedUrl", async (req, res) => {
     }
 });
 
-app.post("/chat", async (req, res) => {
+app.post("/chat",authMiddleware,  async (req, res) => {
+
+    const userId = req.userId!
     const openai = new OpenAI({
         apiKey: process.env.GEMINI_API_KEY,
         baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
@@ -123,10 +125,10 @@ app.post("/chat", async (req, res) => {
     return
 })
 
-app.post("/pdf", async (req, res) => {
-
+app.post("/pdf" , authMiddleware ,  async (req, res) => {
+    const userId = req.userId!
     const { pdfUrl } = req.body;
-
+ 
     const genAI = new GoogleGenerativeAI(apiKey as string);
     const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash' });
 

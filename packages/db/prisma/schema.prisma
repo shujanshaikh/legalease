@@ -13,17 +13,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       String @id @default(uuid())
+  username String
+}
 
 model Chat {
-  id        String   @id @default(uuid())
+  id        String      @id @default(uuid())
   userId    String
-  role        MessageType
+  role      MessageType
   message   String
-  createdAt DateTime @default(now())
+  createdAt DateTime    @default(now())
 }
+
+
+model Pdf {
+  id        String      @id @default(uuid())
+  userId    String
+  role      MessageType
+  message   String  
+  fileName  String
+  content   String?
+  createdAt DateTime    @default(now())
+}
+
 
 enum MessageType {
-  USER 
+  USER
   ASSISTANT
 }
-

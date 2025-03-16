@@ -14,12 +14,15 @@
     "@clerk/nextjs": "^6.12.5",
     "@repo/ui": "*",
     "@tailwindcss/postcss": "^4.0.14",
+    "@types/pdf-parse": "^1.1.4",
     "next": "^15.2.1",
     "next-auth": "^4.24.11",
     "openai": "^4.87.3",
+    "pdf-parse": "^1.1.1",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "svix": "^1.61.4",
     "tailwindcss": "^4.0.14"
   },
   "devDependencies": {

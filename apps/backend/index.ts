@@ -1,10 +1,15 @@
-import express from "express";
+import express, { Router } from "express";
 import { S3Client } from "bun";
 import cors from "cors";
 import prisma from "db";
 import OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
-import { SYSTEM_PROMPT } from "prompt/systemPrompt"
+import { SYSTEM_PROMPT } from "prompt/prompts/systemPrompt"
+import {pdfPrompt} from "prompt/prompts/pdfPrompt"
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const apiKey = Bun.env.GEMINI_API_KEY;
+const userId = "shujan123";
 
 
 const app = express();
@@ -55,15 +60,15 @@ app.get("/pre-signedUrl", async (req, res) => {
     }
 });
 
-app.post("/chat" ,async (req , res) => {
+app.post("/chat", async (req, res) => {
     const openai = new OpenAI({
         apiKey: process.env.GEMINI_API_KEY,
         baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
     });
 
-    const { message } = req.body;  
+    const { message } = req.body;
 
-    const userId = "shujan123";
+  
 
     if (!message) {
         res.json({
@@ -85,9 +90,9 @@ app.post("/chat" ,async (req , res) => {
             createdAt: "asc"
         }
     })
-    
+
     const convo: ChatCompletionMessageParam[] = [
-        { role: "system", content: SYSTEM_PROMPT  },
+        { role: "system", content: SYSTEM_PROMPT },
         ...previousMessage.map(p => ({
             role: p.role.toLowerCase() as "user" | "assistant" | "system",
             content: p.message || ""
@@ -95,14 +100,14 @@ app.post("/chat" ,async (req , res) => {
         { role: "user", content: message }
     ]
 
-    
-   console.log("reached here")
-   console.log(convo)
+
+    console.log("reached here")
+    console.log(convo)
     const response = await openai.chat.completions.create({
         model: "gemini-2.0-flash",
-        messages : convo
+        messages: convo
     });
- 
+
     console.log(response)
     const reply = response.choices[0]?.message.content;
 
@@ -114,8 +119,41 @@ app.post("/chat" ,async (req , res) => {
         }
     });
 
-     res.json({ reply });
-     return
+    res.json({ reply });
+    return
+})
+
+app.post("/pdf", async (req, res) => {
+
+   const { pdfUrl } = req.body;
+     
+    const genAI = new GoogleGenerativeAI(apiKey as string);
+    const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash'});
+
+    console.log(pdfUrl)
+    const pdfResp = await fetch(pdfUrl)
+        .then((response) => response.arrayBuffer());
+
+    const result = await model.generateContent([
+        {
+            inlineData: {
+                data: Buffer.from(pdfResp).toString("base64"),
+                mimeType: "application/pdf",
+            },
+        },
+        `${pdfPrompt}`,
+    ]);
+    await prisma.pdf.create({
+        data: {
+            userId ,
+            message: result.response.text(),
+            role : "USER",
+            pdfUrl,
+        }
+    })
+
+    console.log(result.response.text());
+    res.json({ reply: result.response.text() })
 })
 
 app.listen(8000, (() => { console.log("Running on port 8000") }))

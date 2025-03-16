@@ -32,7 +32,7 @@ model Pdf {
   userId    String
   role      MessageType
   message   String  
-  fileName  String
+  pdfUrl    String
   content   String?
   createdAt DateTime    @default(now())
 }

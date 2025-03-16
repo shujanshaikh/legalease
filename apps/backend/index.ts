@@ -5,7 +5,7 @@ import prisma from "db";
 import OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 import { SYSTEM_PROMPT } from "prompt/prompts/systemPrompt"
-import {pdfPrompt} from "prompt/prompts/pdfPrompt"
+import { pdfPrompt } from "prompt/prompts/pdfPrompt"
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiKey = Bun.env.GEMINI_API_KEY;
@@ -68,7 +68,7 @@ app.post("/chat", async (req, res) => {
 
     const { message } = req.body;
 
-  
+
 
     if (!message) {
         res.json({
@@ -125,10 +125,10 @@ app.post("/chat", async (req, res) => {
 
 app.post("/pdf", async (req, res) => {
 
-   const { pdfUrl } = req.body;
-     
+    const { pdfUrl } = req.body;
+
     const genAI = new GoogleGenerativeAI(apiKey as string);
-    const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash'});
+    const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash' });
 
     console.log(pdfUrl)
     const pdfResp = await fetch(pdfUrl)
@@ -145,9 +145,9 @@ app.post("/pdf", async (req, res) => {
     ]);
     await prisma.pdf.create({
         data: {
-            userId ,
-            message: result.response.text(),
-            role : "USER",
+            userId,
+            content: result.response.text(),
+            role: "USER",
             pdfUrl,
         }
     })

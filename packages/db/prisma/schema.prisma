@@ -31,7 +31,7 @@ model Pdf {
   id        String      @id @default(uuid())
   userId    String
   role      MessageType
-  message   String  
+  message   String? 
   pdfUrl    String
   content   String?
   createdAt DateTime    @default(now())

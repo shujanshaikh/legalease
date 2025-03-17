@@ -10,6 +10,7 @@ export function authMiddleware(req : Request , res : Response , next : NextFunct
     return 
   }
   const decoded = jwt.verify(token , JWT_PUBLIC_KEY)
+  console.log(decoded)
   if(!decoded || !decoded.sub) {
     res.status(400).json({error : "Decoded fail"})
     return 

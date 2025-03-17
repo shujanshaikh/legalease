@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express from "express";
 import { S3Client } from "bun";
 import cors from "cors";
 import prisma from "db";
@@ -60,8 +60,8 @@ app.get("/pre-signedUrl", async (req, res) => {
     }
 });
 
-app.post("/chat",authMiddleware,  async (req, res) => {
-
+app.post("/chat", authMiddleware ,  async (req, res) => {
+ try {
     const userId = req.userId!
     const openai = new OpenAI({
         apiKey: process.env.GEMINI_API_KEY,
@@ -80,14 +80,14 @@ app.post("/chat",authMiddleware,  async (req, res) => {
     }
     await prisma.chat.create({
         data: {
-            userId,
+            userId ,
             role: "USER", message
         }
     })
 
     const previousMessage = await prisma.chat.findMany({
         where: {
-            userId
+            userId 
         }, orderBy: {
             createdAt: "asc"
         }
@@ -115,7 +115,7 @@ app.post("/chat",authMiddleware,  async (req, res) => {
 
     await prisma.chat.create({
         data: {
-            userId,
+            userId ,
             role: "ASSISTANT",
             message: reply || ""
         }
@@ -123,9 +123,14 @@ app.post("/chat",authMiddleware,  async (req, res) => {
 
     res.json({ reply });
     return
+ } catch (error) {
+    res.status(500).json({message : "Invalid data"})
+ }
+  
 })
 
-app.post("/pdf" , authMiddleware ,  async (req, res) => {
+app.post("/pdf" , authMiddleware,   async (req, res) => {
+   try {
     const userId = req.userId!
     const { pdfUrl } = req.body;
  
@@ -145,17 +150,21 @@ app.post("/pdf" , authMiddleware ,  async (req, res) => {
         },
         `${pdfPrompt}`,
     ]);
-    await prisma.pdf.create({
+    await prisma.chat.create({
         data: {
-            userId,
-            content: result.response.text(),
-            role: "USER",
-            pdfUrl,
+            userId ,
+            message: result.response.text(),
+            role: "ASSISTANT",
         }
     })
 
     console.log(result.response.text());
     res.json({ reply: result.response.text() })
+   } catch (error) {
+     res.status(500).json({
+        message : "Error occured"
+     })
+   }
 })
 
 app.listen(8000, (() => { console.log("Running on port 8000") }))

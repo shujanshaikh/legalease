@@ -1,14 +1,15 @@
 
 import { currentUser } from "@clerk/nextjs/server"
+import LegalWebsite from "./components/dashboard"
 
 export default async function Home() {
   const user = await currentUser()
 
-  if (!user) return <div className="flex justify-center items-center p-6">Not signed in</div>
+  if (!user) return <div> <LegalWebsite /></div>
 
   return (
-    <div className="flex justify-center items-center p-6">
-      <h1>Welcome to Legalease </h1>
+    <div >
+       Main Page
       
     </div>
   )

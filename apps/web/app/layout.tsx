@@ -4,9 +4,13 @@ import {
 } from '@clerk/nextjs'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
+<<<<<<< HEAD
 import Footer from './components/footer/Footer'
 
 
+=======
+import { Appbar } from './components/ui/AppBar'
+>>>>>>> upstream/main
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,11 +38,17 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+<<<<<<< HEAD
 
             {children}
        
        <Footer />
 
+=======
+            <Appbar />
+            {children}
+          
+>>>>>>> upstream/main
         </body>
       </ClerkProvider>
     </html>

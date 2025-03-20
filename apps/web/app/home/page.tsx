@@ -3,6 +3,7 @@ import { useState } from 'react';
 import RightNav from '../components/home-page/Right-side-tabs/RightNav';
 import HeroSection from '../components/home-page/hero-section/HeroSection';
 import { Appbar } from '../components/appBar/AppBar';
+import Footer from '../components/footer/Footer';
 
 
 export default function LandingPage() {

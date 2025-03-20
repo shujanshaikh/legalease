@@ -20,5 +20,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.5.0"
+  }
 }

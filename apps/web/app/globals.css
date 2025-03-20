@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 @import "tailwindcss";
 @theme {
   
@@ -25,6 +24,3 @@
 .bg-lightGray { background-color: var(--color-lightGray); }
 .bg-blue { background-color: var(--color-blue); }
 .bg-ivory { background-color: var(--color-ivory); }
-=======
-@import "tailwindcss";
->>>>>>> upstream/main

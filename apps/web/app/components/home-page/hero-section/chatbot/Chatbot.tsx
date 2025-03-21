@@ -1,9 +1,8 @@
 "use client";
-
 import { useEffect, useState, useRef } from "react";
 import Message from "./Message";
-
-
+import { useAuth } from "@clerk/nextjs"; // Import Clerk's useAuth
+import axios from "axios";
 export default function Chatbot() {
   const [query, setQuery] = useState("");
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([]);
@@ -14,7 +13,16 @@ export default function Chatbot() {
   const chatboxRef = useRef<HTMLDivElement>(null);
   const typingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);//Changed
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const { getToken } = useAuth(); // Clerk getToken hook
+  const API_BACKEND_URL = "http://localhost:8000"; // Update to your backend URL in production
 
+async function tokenwala(){
+  const token = await getToken();
+  console.log("Generated Token:", token);
+}
+tokenwala();
+const { isSignedIn } = useAuth();
+console.log("Is user signed in:", isSignedIn);
   //Changed from here
   useEffect(() => {
     if (isMinimized) {
@@ -22,6 +30,7 @@ export default function Chatbot() {
     }
   }, [isMinimized]);
   
+
   
   useEffect(() => {
     if (isTyping && inputRef.current) {
@@ -81,7 +90,29 @@ export default function Chatbot() {
     setIsMinimized(false);
     setIsTyping(true);
 
+    try {
+      const token = await getToken(); // Fetch the token from Clerk
+      const response = await axios.post(
+        `${API_BACKEND_URL}/api/chat`, // Replace with your backend endpoint
+        { query },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in Authorization header
+          },
+        }
+      );
+
+      const aiResponse = response.data.response;
+      simulateTyping(aiResponse);
+    } catch (error) {
+      console.error("Error fetching AI response:", error);
+      simulateTyping("Something went wrong. Please try again.");
+    }
+
+      
   }
+
+  
 
   function simulateTyping(fullText: string) {
     let index = 0;

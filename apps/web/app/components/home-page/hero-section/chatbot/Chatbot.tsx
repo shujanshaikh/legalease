@@ -12,66 +12,64 @@ export default function Chatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatboxRef = useRef<HTMLDivElement>(null);
-  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const typingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);//Changed
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-   useEffect(() => {
+  //Changed from here
+  useEffect(() => {
     if (isMinimized) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [isMinimized]);
-
+  
+  
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
-
-  useEffect(() => {
-    if (inputRef.current) {
+    if (isTyping && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isTyping]);
-
-
-    useEffect(() => {
+  
+  useEffect(() => {
+    if (messages.length > 0) {
       messagesContainerRef.current?.scrollTo({
         top: messagesContainerRef.current.scrollHeight,
         behavior: "smooth",
       });
-    }, [messages,isMinimized]);
-    
-
-    const firstRender = useRef(true);
-    const hasMinimizedBefore = useRef(false);
-    
-    useEffect(() => {
-      if (firstRender.current) {
-        firstRender.current = false;
-        return; 
+    }
+  }, [messages]); 
+  
+  const firstRender = useRef(true);
+  const hasMinimizedBefore = useRef(false);
+  
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+  
+    if (!isMinimized && chatboxRef.current) {
+      chatboxRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+  
+      if (hasMinimizedBefore.current) {
+        setTimeout(() => {
+          window.scrollTo({
+            top: window.scrollY + 280,
+            behavior: "smooth",
+          });
+        }, 300);
       }
-    
-      if (!isMinimized && chatboxRef.current) {
-        chatboxRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-    
-        if (hasMinimizedBefore.current) {
-          setTimeout(() => {
-            window.scrollTo({
-              top: window.scrollY + 280,
-              behavior: "smooth",
-            });
-          }, 300);
-        }
-    
-        hasMinimizedBefore.current = false; 
-      }
-    
-      if (isMinimized) {
-        hasMinimizedBefore.current = true; 
-      }
-    }, [isMinimized, messages.length]);
+  
+      hasMinimizedBefore.current = false;
+    }
+  
+    if (isMinimized) {
+      hasMinimizedBefore.current = true;
+    }
+  }, [isMinimized, messages.length]); 
+  
     
 
   async function handleSubmit() {
@@ -85,32 +83,40 @@ export default function Chatbot() {
 
   }
 
-    function simulateTyping(fullText: string) {
-      let currentText = "";
-      let index = 0;
-    
-      setIsTyping(true);
-    
-      typingIntervalRef.current = setInterval(() => {
-        if (index < fullText.length) {
-          currentText += fullText[index];
-          index++;
-          setMessages((prev) => {
-            let lastMessage = prev[prev.length - 1];
-            if (lastMessage && !lastMessage.isUser) {
-              return [...prev.slice(0, -1), { text: currentText, isUser: false }];
-            } else {
-              return [...prev, { text: currentText, isUser: false }];
-            }
-          });
-        } else {
-          clearInterval(typingIntervalRef.current!);
-          typingIntervalRef.current = null;
-          setIsTyping(false); 
-          inputRef.current?.focus();
-        }
-      }, 5);
+  function simulateTyping(fullText: string) {
+    let index = 0;
+    let currentText = "";
+  
+    setIsTyping(true);
+  
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current);
     }
+  
+    typingIntervalRef.current = setInterval(() => {
+      if (index < fullText.length) {
+        currentText = fullText.slice(0, index + 1); 
+        index++;
+  
+        setMessages((prev) => {
+          let lastMessage = prev[prev.length - 1];
+  
+          if (lastMessage && !lastMessage.isUser) {
+            return [...prev.slice(0, -1), { text: currentText, isUser: false }];
+          } else {
+            return [...prev, { text: currentText, isUser: false }];
+          }
+        });
+      } else {
+        clearInterval(typingIntervalRef.current!);
+        typingIntervalRef.current = null;
+        setIsTyping(false);
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 0);
+      }
+    }, 50); 
+  }  //to here
 
     function stopTyping() {
       if (typingIntervalRef.current) {
@@ -197,4 +203,3 @@ export default function Chatbot() {
 function setIsTyping(arg0: boolean) {
   throw new Error("Function not implemented.");
 }
-

@@ -4,8 +4,6 @@ import TabButton from "./tabButtons/TabButton";
 
 
 export function Appbar() {
-
-
   return (
     <div className="w-full p-6 sticky top-0 shadow-lg flex items-center justify-between bg-dark">
       <div className="flex items-center space-x-4">
@@ -28,8 +26,6 @@ export function Appbar() {
             <Link href="/signup" className="px-4 py-2 rounded-lg text-lg bg-accent text-dark transition transform duration-100 hover:scale-110">
               Sign Up
             </Link>
-         
-    
         </div>
         <div className="min-w-[40px]">
         </div>

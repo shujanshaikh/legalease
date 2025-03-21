@@ -1,22 +1,31 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken"
-import { JWT_PUBLIC_KEY } from "./config";
+import { JWT_SECRET } from "./config";
 
 
 export function authMiddleware(req : Request , res : Response , next : NextFunction) {
-  const token = req.headers["authorization"]
-  if(!token) {
-    res.status(400).json({error : "Invalid token"})
-    return 
-  }
-  const decoded = jwt.verify(token , JWT_PUBLIC_KEY)
-  console.log(decoded)
-  if(!decoded || !decoded.sub) {
-    res.status(400).json({error : "Decoded fail"})
-    return 
+ try {
+  const jwtHeader = req.headers["authorization"];
+  const token = jwtHeader?.split(" ")[1]
+  if(!token){
+    res.status(400).json({
+      message : "No token found"
+    })
+    return
   }
 
-  req.userId = decoded.sub as string
-
-  next()
+  const decoded = jwt.verify(token, JWT_SECRET) as { userId: string}
+    if(!decoded){
+        res.status(401).json({
+            message : "Unauthorized"
+        })
+        return
+    }
+    req.userId = decoded.userId
+    next()
+ } catch (error) {
+    res.status(500).json({
+      message : "Invalid authorization"
+    })
+ }
 }

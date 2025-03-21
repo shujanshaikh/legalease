@@ -1,11 +1,21 @@
-import { SigninSchema, SignupSchema } from "common";
 import { Router } from "express";
 import { JWT_SECRET } from "../../config";
 import prisma from "db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import {z} from "zod"
 
 export const authRouter = Router()
+
+ const SignupSchema = z.object({
+    email : z.string().email(),
+    password : z.string()
+})
+
+ const SigninSchema = z.object({
+    email : z.string().email(),
+    password : z.string()
+})
 
 authRouter.post("/signup", async (req, res) => {
     const parsedData = SignupSchema.safeParse(req.body);

@@ -2,40 +2,40 @@
 
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation"; // Ensure correct import
+import { useRouter } from "next/navigation";
 
-export default function SignIn() {
+
+export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [responseMessage, setResponseMessage] = useState(""); // State to store the backend response message
+  const [responseMessage, setResponseMessage] = useState("");
   const router = useRouter();
 
-  const handleSignin = async (e: React.FormEvent) => {
+  async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/signin", { email, password });
-      setResponseMessage(response.data.message); // Store success message
-      // Optionally save the token in localStorage or a cookie
-      localStorage.setItem("token", response.data.token); 
-      router.push("/dashboard"); // Redirect to dashboard or another page
+      const response = await axios.post("http://localhost:8000/signup", { email, password });
+      setResponseMessage(response.data.message);
+      router.push("/signin");
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
-        setResponseMessage(error.response.data?.message || "Something went wrong. Please try again.");
+        alert(error.response.data?.message || "Something went wrong. Please try again.");
       } else if (error instanceof Error) {
-        setResponseMessage(error.message);
+        alert(error.message);
       } else {
-        setResponseMessage("An unknown error occurred.");
+        alert("An unknown error occurred.");
       }
     }
-  };
+  }
 
   return (
-<div className="flex flex-col justify-center items-center min-h-screen bg-dark">
+
+    <div className="flex flex-col justify-center items-center min-h-screen bg-dark">
       <form
-        onSubmit={handleSignin}
+        onSubmit={handleSignup}
         className="flex flex-col items-center bg-white p-10 rounded-3xl shadow-md"
       >
-        <div className="text-4xl font-bold m-10">Signin Page</div>
+        <div className="text-4xl font-bold m-10">Signup Page</div>
         <input
           type="email"
           placeholder="Email"
@@ -56,7 +56,7 @@ export default function SignIn() {
           type="submit"
           className="px-4 py-2 m-5 rounded-lg text-lg bg-accent text-dark"
         >
-          Signin
+          Signup
         </button>
       </form>
       {responseMessage && (

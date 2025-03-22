@@ -1,20 +1,17 @@
 "use client";
+import { DashAppbar } from '../components/Dashboard/DashAppbar';
 import RightNav from '../components/home-page/Right-side-tabs/RightNav';
 import HeroSection from '../components/home-page/hero-section/HeroSection';
-import { Appbar } from '../components/appBar/AppBar';
 
 
 
-export default function LandingPage() {
+export default function Dashboard() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative bg-ivory">
-<Appbar/>
+<DashAppbar />
    <RightNav />
-
    <HeroSection />
-
-
     </div>
   );
 }

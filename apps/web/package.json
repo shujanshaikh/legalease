@@ -15,11 +15,8 @@
     "@repo/ui": "*",
     "@tailwindcss/postcss": "^4.0.14",
     "@types/pdf-parse": "^1.1.4",
-<<<<<<< HEAD
     "axios": "^1.8.4",
-=======
     "clsx": "^2.1.1",
->>>>>>> 2f9d24d54c7bce36d309b8d5d334e3e58d1619c2
     "next": "^15.2.1",
     "next-auth": "^4.24.11",
     "openai": "^4.87.3",

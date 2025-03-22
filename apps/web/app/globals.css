@@ -1,4 +1,14 @@
 @import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  button {
+    @apply cursor-pointer;
+  }
+}
 @theme {
   
   /* New Colors */

@@ -155,77 +155,82 @@ const handleStop = () => {
 }
 
 
-  return (
-    <div className="flex flex-col items-center justify-center w-full max-w-5xl mx-auto mt-16">
-      {isOpen && (
-        <div
-          ref={chatboxRef}
-          className={`w-full max-w-[600px] bg-white border-accent shadow-lg rounded-lg transition-all duration-300 ease-in-out overflow-hidden ${
-            isMinimized ? "h-[50px] border-none" : "h-[550px]"
-          }`}
-        >
-          <div className="flex justify-between items-center bg-accent p-3 rounded-t-lg">
-            <h3 className="text-xl font-semibold text-orange-50">Chat Assistant</h3>
-            <button
-              onClick={() => setIsMinimized(!isMinimized)}
-            >
-              {isMinimized ? "🔼" : "🔽"}
-            </button>
+return (
+  <div className="flex flex-col items-center justify-center w-full max-w-5xl mx-auto mt-8 px-4">
+    {isOpen && (
+      <div
+        ref={chatboxRef}
+        className={`w-full sm:max-w-[400px] md:max-w-[500px] lg:max-w-[800px] bg-white border shadow-lg rounded-lg transition-all duration-300 ease-in-out overflow-hidden ${
+          isMinimized ? "h-[50px] border-none" : "h-[550px]"
+        }`}
+      >
+        <div className="flex justify-between items-center bg-accent p-3 rounded-t-lg">
+          <h3 className="text-lg md:text-xl font-semibold text-orange-50">
+            Chat Assistant
+          </h3>
+          <button onClick={() => setIsMinimized(!isMinimized)}>
+            {isMinimized ? "🔼" : "🔽"}
+          </button>
+        </div>
+
+        {!isMinimized && (
+          <div
+            ref={messagesContainerRef}
+            className="p-4 overflow-y-auto h-[480px] flex flex-col"
+          >
+            {messages.map((msg, index) => (
+              <Message key={index} text={msg.text} isUser={msg.isUser} />
+            ))}
+            {loader && (
+              <div className="flex items-center mt-2">
+                <div className="animate-bounce w-2 h-2 bg-ivory rounded-full mx-1"></div>
+                <div className="animate-bounce w-2 h-2 bg-ivory rounded-full mx-1 animation-delay-200"></div>
+                <div className="animate-bounce w-2 h-2 bg-ivory rounded-full mx-1 animation-delay-400"></div>
+              </div>
+            )}
           </div>
+        )}
+      </div>
+    )}
 
-          {!isMinimized && (
-  <div ref={messagesContainerRef} className="p-4 overflow-y-auto h-[480px] flex flex-col">
-    {messages.map((msg, index) => (
-      <Message key={index} text={msg.text} isUser={msg.isUser} />
-    ))}
-    {loader && (
-                <div className="flex items-center mt-2">
-                  <div className="animate-bounce w-2 h-2 bg-ivory rounded-full mx-1"></div>
-                  <div className="animate-bounce w-2 h-2 bg-ivory rounded-full mx-1 animation-delay-200"></div>
-                  <div className="animate-bounce w-2 h-2 bg-ivory rounded-full mx-1 animation-delay-400"></div>
-                </div>
-              )}
-  </div>
-)
-}  </div>
-      )}
+    <div className="flex flex-col sm:flex-row items-center justify-center p-4 w-full">
+      <div className="relative w-full sm:w-[400px] md:w-[500px] lg:w-[600px] mb-4 sm:mb-0 sm:mr-4">
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Ask our AI legal assistant..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => !isTyping && e.key === "Enter" && handleSubmit()}
+          onMouseEnter={() => inputRef.current?.focus()}
+          disabled={isTyping}
+          className={`w-full text-gray-900 bg-white px-8 py-4 rounded-full focus:outline-none text-lg sm:text-xl transition-transform duration-200 focus:shadow-lg focus:scale-103 ${
+            isTyping ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        />
 
-      <div className="flex items-center justify-center p-6 w-full">
-      <div className="relative w-[600px]">
-      <input
-  ref={inputRef}
-  type="text"
-  placeholder="Ask our AI legal assistant..."
-  value={query} 
-  onChange={(e) => setQuery(e.target.value)} 
-  onKeyDown={(e) => !isTyping && e.key === "Enter" && handleSubmit()} 
-  onMouseEnter={() => inputRef.current?.focus()} 
-  disabled={isTyping} 
-  className={`w-full text-gray-900 bg-white px-8 py-5 rounded-full focus:outline-none text-xl transition-transform duration-200 focus:shadow-lg focus:scale-103 ${
-    isTyping ? "opacity-50 cursor-not-allowed" : ""
-  }`}
-/>
+        {isTyping && (
+          <button
+            onClick={handleStop}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-dark text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-300 transition"
+          >
+            ❌
+          </button>
+        )}
+      </div>
 
-{isTyping && (
-    <button
-      onClick={handleStop}
-      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-red-500 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-red-600 transition"
-    >
-      n
-    </button>
-  )}
-</div>
-
+      <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
         <button
           onClick={handleSubmit}
-          className="ml-4 px-6 py-5 rounded-lg text-xl whitespace-nowrap bg-accent text-dark hover:scale-110 transition-transform duration-200"
+          className="px-6 py-4 rounded-lg text-lg sm:text-xl bg-accent text-dark hover:scale-110 transition-transform duration-200"
         >
           Ask
         </button>
-        <button className="ml-4 px-6 py-5 rounded-lg text-xl whitespace-nowrap bg-accent text-dark hover:scale-110 transition-transform duration-200">
+        <button className="px-6 py-4 rounded-lg text-lg sm:text-xl bg-accent text-dark hover:scale-110 transition-transform duration-200">
           Upload Your Doc
         </button>
       </div>
     </div>
-  );
+  </div>
+);
 }

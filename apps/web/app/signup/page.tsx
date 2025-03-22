@@ -3,6 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 export default function SignUp() {
@@ -29,8 +30,10 @@ export default function SignUp() {
   }
 
   return (
-
+<div className="bg-dark">
+<Link href="/home">Back</Link>
     <div className="flex flex-col justify-center items-center min-h-screen bg-dark">
+  
       <form
         onSubmit={handleSignup}
         className="flex flex-col items-center bg-white p-10 rounded-3xl shadow-md"
@@ -58,6 +61,9 @@ export default function SignUp() {
         >
           Signup
         </button>
+        <div>
+        <Link href="/signin" className="hover:underline text-blue-500">Already Have an account? SignIn</Link>  
+        </div>
       </form>
       {responseMessage && (
         <div className="mt-5 text-center bg-green-100 text-green-800 p-4 rounded-md w-96">
@@ -65,5 +71,6 @@ export default function SignUp() {
         </div>
       )}
     </div>
+</div>
   );
 }

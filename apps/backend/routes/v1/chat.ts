@@ -7,9 +7,6 @@ import { SYSTEM_PROMPT } from "prompt/prompts/systemPrompt"
 
 
 export const chatRouter = Router()
-
-
-
 chatRouter.post("/chat", authMiddleware ,  async (req, res) => {
     try {
        const userId = req.userId!

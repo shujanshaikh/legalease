@@ -15,8 +15,8 @@ export default function Message({ text, isUser }: MessageProps) {
       className={clsx(
         "p-3 rounded-lg max-w-[80%] break-words",
         isUser
-          ? "bg-blue-500 text-white self-end ml-auto mt-4"
-          : "bg-gray-200 text-gray-900 self-start mr-auto mt-4"
+          ? "bg-accent font-semibold text-orange-50 self-end ml-auto mt-4"
+          : "bg-orange-50 font-semibold text-ivory self-start mr-auto mt-4"
       )}
     >
       {text}

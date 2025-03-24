@@ -1,0 +1,44 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack --port 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint --max-warnings 0",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.12.5",
+    "@repo/ui": "*",
+    "@tailwindcss/postcss": "^4.0.14",
+    "@types/pdf-parse": "^1.1.4",
+    "axios": "^1.8.4",
+    "clsx": "^2.1.1",
+    "next": "^15.2.1",
+    "next-auth": "^4.24.11",
+    "openai": "^4.87.3",
+    "pdf-parse": "^1.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "svix": "^1.61.4"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@types/node": "^22.13.9",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
+    "autoprefixer": "^10.4.21",
+    "common": "*",
+    "db": "*",
+    "eslint": "^9.22.0",
+    "postcss": "^8.5.3",
+    "prompt": "*",
+    "tailwindcss": "^4.0.14",
+    "typescript": "5.8.2"
+  }
+}

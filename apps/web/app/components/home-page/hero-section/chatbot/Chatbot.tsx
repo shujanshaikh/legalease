@@ -2,9 +2,12 @@
 import { useEffect, useState, useRef } from "react";
 import Message from "./Message";
 import axios from "axios";
+import { Upload } from "../../../ui/upload";
 export default function Chatbot() {
   const [query, setQuery] = useState("");
-  const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([]);
+  const [messages, setMessages] = useState<
+  { text?: string; isUser: boolean; isPDF?: boolean; pdfUrl?: string }[]
+>([]);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -14,6 +17,23 @@ export default function Chatbot() {
   const chatboxRef = useRef<HTMLDivElement>(null);
   const typingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);//Changed
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [pdfUrl, setPdfUrl] = useState("")
+  const [uploaded, setUploaded] = useState(false)
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      console.log(`Key pressed: ${event.key}`);
+
+    };
+
+
+    document.addEventListener("keydown", handleKeyDown);
+
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     if (isMinimized) {
@@ -70,12 +90,19 @@ export default function Chatbot() {
     }
   }, [isMinimized, messages.length]); 
   
-  
+  const handleUpload = (url: string) => {
+    setPdfUrl(url);
+    setUploaded(true);
+    setIsOpen(true); 
+    setIsMinimized(false);
+    setMessages((prev) => [
+      ...prev,
+      { isUser: true, isPDF: true, text: url },
+    ]);
+  };
 
 async function handleSubmit() {
   if (query.trim() === "") return; 
-
-
   setMessages((prev) => [...prev, { text: query, isUser: true }]);
   setQuery(""); 
   setIsOpen(true); 
@@ -99,9 +126,41 @@ async function handleSubmit() {
     simulateTyping(backendReply); 
   } catch (error) {
     console.error("Error communicating with backend:", error);
-    simulateTyping("AI Response: Sorry, I couldn't process your request. Please try again.");
+    simulateTyping("Sorry, I couldn't process your request. Try Signing In");
+    setLoader(false)
   }
 }
+const handleProcessPDF = async () => {
+  
+  if (!pdfUrl) {
+    alert("No PDF URL found. Please upload a file first.");
+    return;
+  }
+setLoader(true);
+setIsTyping(true);
+  const token = localStorage.getItem("token");
+
+  try {
+    console.log("Sending request to /pdf endpoint with URL:", pdfUrl);
+    const response = await axios.post(
+      "http://localhost:8000/pdf", 
+      { pdfUrl }, 
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+          "Content-Type": "application/json",
+        },
+      }
+    );
+const backendReply = response.data.reply
+setLoader(false)
+simulateTyping(backendReply)
+setUploaded(false);;
+  } catch (error) {
+    console.error("Error while hitting /pdf endpoint:", error);
+    alert("An error occurred while processing the PDF.");
+  }
+};
 
 
 function simulateTyping(fullText: string) {
@@ -145,7 +204,6 @@ const handleStop = () => {
   inputRef.current?.focus(); 
 
   setMessages((prev) => {
-    // Finalize the last AI message
     const lastMessage = prev[prev.length - 1];
     if (lastMessage && !lastMessage.isUser && lastMessage.text) {
       return prev;
@@ -160,7 +218,7 @@ return (
     {isOpen && (
       <div
         ref={chatboxRef}
-        className={`w-full sm:max-w-[400px] md:max-w-[500px] lg:max-w-[800px] bg-white border shadow-lg rounded-lg transition-all duration-300 ease-in-out overflow-hidden ${
+        className={`w-full sm:max-w-[400px] md:max-w-[500px] lg:max-w-[800px] bg-white border- shadow-lg rounded-lg transition-all duration-300 ease-in-out overflow-hidden ${
           isMinimized ? "h-[50px] border-none" : "h-[550px]"
         }`}
       >
@@ -168,19 +226,24 @@ return (
           <h3 className="text-lg md:text-xl font-semibold text-orange-50">
             Chat Assistant
           </h3>
-          <button onClick={() => setIsMinimized(!isMinimized)}>
-            {isMinimized ? "🔼" : "🔽"}
+          <button className="hover:opacity-100 opacity-85 rounded text-dark text-lg" onClick={() => setIsMinimized(!isMinimized)}>
+            {isMinimized ? "↓" : "✕"}
           </button>
         </div>
 
         {!isMinimized && (
-          <div
-            ref={messagesContainerRef}
-            className="p-4 overflow-y-auto h-[480px] flex flex-col"
-          >
-            {messages.map((msg, index) => (
-              <Message key={index} text={msg.text} isUser={msg.isUser} />
-            ))}
+  <div
+    ref={messagesContainerRef}
+    className="p-4 overflow-y-auto h-[480px] flex flex-col"
+  >
+    {messages.map((msg, index) => (
+      <Message
+        key={index}
+        text={msg.isPDF ? undefined : msg.text}
+        isUser={msg.isUser}
+        isPDF={msg.isPDF}
+      />
+    ))}
             {loader && (
               <div className="flex items-center mt-2">
                 <div className="animate-bounce w-2 h-2 bg-ivory rounded-full mx-1"></div>
@@ -208,13 +271,13 @@ return (
             isTyping ? "opacity-50 cursor-not-allowed" : ""
           }`}
         />
-
+<div></div>
         {isTyping && (
           <button
             onClick={handleStop}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-dark text-white p-2 rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-300 transition"
+            className="absolute hover:opacity-90 right-4 top-1/2 transform -translate-y-1/2 bg-accent text-dark text-xl p-2 rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-gray-300 transition"
           >
-            ❌
+            ◼︎
           </button>
         )}
       </div>
@@ -226,9 +289,17 @@ return (
         >
           Ask
         </button>
-        <button className="px-6 py-4 rounded-lg text-lg sm:text-xl bg-accent text-dark hover:scale-110 transition-transform duration-200">
-          Upload Your Doc
+        {!uploaded ? (
+        <Upload
+          onUpload={handleUpload}
+        />
+      ) : (
+        <button
+          className="px-6 py-4 rounded-lg text-lg sm:text-xl bg-accent text-dark hover:scale-110 transition-transform duration-200"
+          onClick={handleProcessPDF} >
+          Process PDF
         </button>
+      )}
       </div>
     </div>
   </div>

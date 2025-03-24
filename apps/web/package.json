@@ -1,7 +1,9 @@
 {
-<<<<<<< HEAD
   "name": "legalease",
   "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "bun@1.2.4",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -9,65 +11,46 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
   },
-  "devDependencies": {
-    "prettier": "^3.5.3",
-    "turbo": "^2.4.4",
-    "typescript": "5.8.2"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "bun@1.2.4",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.5.0"
-=======
-  "name": "web",
-  "version": "0.1.0",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack --port 3000",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint --max-warnings 0",
-    "check-types": "tsc --noEmit"
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.12.5",
+    "@clerk/nextjs": "^6.12.9",
     "@repo/ui": "*",
-    "@tailwindcss/postcss": "^4.0.14",
+    "@tailwindcss/postcss": "^4.0.15",
     "@types/pdf-parse": "^1.1.4",
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.5.0",
     "lucide-react": "^0.483.0",
-    "next": "^15.2.1",
+    "next": "^15.2.3",
     "next-auth": "^4.24.11",
-    "openai": "^4.87.3",
+    "openai": "^4.89.0",
     "pdf-parse": "^1.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
-    "svix": "^1.61.4"
+    "svix": "^1.62.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@types/node": "^22.13.9",
+    "@types/node": "^22.13.13",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "autoprefixer": "^10.4.21",
-    "common": "*",
+    "common": "^0.2.5",
     "db": "*",
-    "eslint": "^9.22.0",
+    "eslint": "^9.23.0",
     "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
     "prompt": "*",
     "tailwindcss": "^4.0.15",
+    "turbo": "^2.4.4",
     "typescript": "5.8.2"
->>>>>>> fba88ea (web)
   }
 }

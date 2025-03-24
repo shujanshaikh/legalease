@@ -93,4 +93,3 @@ export function Upload({ onUpload }: { onUpload: (URL: string) => void }) {
       </button>
     </>
   );
-}

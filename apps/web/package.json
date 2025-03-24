@@ -1,4 +1,31 @@
 {
+<<<<<<< HEAD
+  "name": "legalease",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "turbo": "^2.4.4",
+    "typescript": "5.8.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.2.4",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.5.0"
+=======
   "name": "web",
   "version": "0.1.0",
   "type": "module",
@@ -17,6 +44,7 @@
     "@types/pdf-parse": "^1.1.4",
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
+    "lucide-react": "^0.483.0",
     "next": "^15.2.1",
     "next-auth": "^4.24.11",
     "openai": "^4.87.3",
@@ -38,7 +66,8 @@
     "eslint": "^9.22.0",
     "postcss": "^8.5.3",
     "prompt": "*",
-    "tailwindcss": "^4.0.14",
+    "tailwindcss": "^4.0.15",
     "typescript": "5.8.2"
+>>>>>>> fba88ea (web)
   }
 }

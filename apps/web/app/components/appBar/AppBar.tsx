@@ -6,7 +6,6 @@ import { useAuth } from "../../../AuthContext";
 import Authentication from "./Authentication";
 
 export function Appbar() {
-  const { user, isSignedIn } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (

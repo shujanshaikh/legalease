@@ -5,11 +5,11 @@
   "type": "module",
   "packageManager": "bun@1.2.4",
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "check-types": "tsc --noEmit"
   },
   "workspaces": [
     "apps/*",

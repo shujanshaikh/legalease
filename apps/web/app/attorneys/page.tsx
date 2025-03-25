@@ -1,4 +1,5 @@
-import { Appbar } from "../components/appBar/AppBar";
+import Appbar from "../../components/appBar/AppBar";
+
 
 export default function Attorneys(){
     return <div>

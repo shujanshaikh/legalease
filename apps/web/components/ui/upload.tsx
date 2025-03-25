@@ -1,8 +1,9 @@
 "use client";
 
 import axios from "axios";
-import { BACKEND_URL, CLOUDFLARE } from "../../../config";
+
 import { useState } from "react";
+import { BACKEND_URL, CLOUDFLARE } from "../../config";
 
 export function Upload({ onUpload }: { onUpload: (URL: string) => void }) {
   const [uploadStatus, setUploadStatus] = useState("Upload File");

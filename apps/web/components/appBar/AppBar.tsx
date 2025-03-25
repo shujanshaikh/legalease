@@ -1,11 +1,9 @@
 "use client";
-import Link from "next/link";
 import TabButton from "./tabButtons/TabButton";
 import { useState } from "react";
-import { useAuth } from "../../../AuthContext";
 import Authentication from "./Authentication";
 
-export function Appbar() {
+export default function Appbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (

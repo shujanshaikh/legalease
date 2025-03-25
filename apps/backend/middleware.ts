@@ -4,6 +4,7 @@ import { JWT_SECRET } from "./config";
 
 
 export function authMiddleware(req : Request , res : Response , next : NextFunction) {
+  console.log("Auth middleware called" , req.body);
  try {
   const jwtHeader = req.headers["authorization"];
   const token = jwtHeader?.split(" ")[1]
@@ -22,6 +23,7 @@ export function authMiddleware(req : Request , res : Response , next : NextFunct
         return
     }
     req.userId = decoded.userId
+    console.log("User ID:", req.userId);
     next()
  } catch (error) {
     res.status(500).json({

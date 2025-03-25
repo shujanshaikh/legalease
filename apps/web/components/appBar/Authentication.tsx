@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { useAuth } from "../../../AuthContext";
+import { useAuth } from "../../AuthContext";
+
 
 export default function Authentication(){
     const { user, isSignedIn } = useAuth();

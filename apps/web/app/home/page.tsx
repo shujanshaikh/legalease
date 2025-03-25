@@ -1,15 +1,15 @@
 "use client";
-import RightNav from '../components/home-page/Right-side-tabs/RightNav';
-import HeroSection from '../components/home-page/hero-section/HeroSection';
-import { Appbar } from '../components/appBar/AppBar';
-import { useEffect } from 'react';
+
+import Appbar from '../../components/appBar/AppBar';
+import HeroSection from '../../components/home-page/hero-section/HeroSection';
+import RightNav from '../../components/home-page/Right-side-tabs/RightNav';
 
 
 
 export default function LandingPage() {
   return (
    <div className="min-h-screen flex flex-col items-center justify-start relative bg-dark">
-      {/* AppBar at the top */}
+      {/* Appbar at the top */}
       <Appbar />
 
       {/* Main content area */}

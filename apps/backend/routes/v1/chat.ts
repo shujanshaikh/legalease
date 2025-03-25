@@ -18,7 +18,6 @@ chatRouter.post("/chat", authMiddleware ,  async (req, res) => {
        const { message } = req.body;
    
    
-   
        if (!message) {
            res.json({
                message: "Invalid Data"
@@ -49,15 +48,15 @@ chatRouter.post("/chat", authMiddleware ,  async (req, res) => {
            { role: "user", content: message }
        ]
    
-   
-       console.log("reached here")
-       console.log(convo)
+       
        const response = await openai.chat.completions.create({
            model: "gemini-2.0-flash",
-           messages: convo
+           messages: convo,
+           temperature: 0.3,
+           max_tokens: 500
        });
    
-       console.log(response)
+       
        const reply = response.choices[0]?.message.content;
    
        await prisma.chat.create({
@@ -67,7 +66,6 @@ chatRouter.post("/chat", authMiddleware ,  async (req, res) => {
                message: reply || ""
            }
        });
-   
        res.json({ reply });
        return
     } catch (error) {

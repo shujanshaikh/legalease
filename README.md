@@ -2,7 +2,10 @@
 
 ## Overview
 
-The **Indian Law Chatbot** is a web-based platform that provides users with legal information about the Indian legal system. It features a chatbot integrated with PDF processing to assist users with legal queries. The platform includes basic user authentication and utilizes modern web technologies for efficient performance and scalability.
+The **LegaEase** is a web-based platform that provides users with legal information about the Indian legal system. It features a chatbot integrated with PDF processing to assist users with legal queries. The platform includes basic user authentication and utilizes modern web technologies for efficient performance and scalability.
+
+Video Link ⬇️
+https://drive.google.com/file/d/1-L46TxgYy1bo75g1dWAg9z2XnL0Rv8sF/view?usp=sharing
 
 ## Features
 
